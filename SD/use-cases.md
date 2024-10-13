@@ -31,18 +31,40 @@
 - Timestamp usually takes 7 bytes ( 4 bytes for date \+ 3 bytes for time)  
 - Size of ID \-\> 64 bit (8 bytes)
 
-| 2.5 million seconds per month 12 RPS  \= 1 million requests per day 1 RPS   \= 2.5 million requests per month 4 RPS   \= 10 million requests per month 40 RPS  \= 100 million requests per month 400 RPS \= 1 billion requests per month 10k RPS \= 1 billion requests per day |
-| :---- |
+
+| RPS | Total requests |
+| :---- | :---- |
+| 1 | 2.5M requests/month |
+| 4 | 10 M requests/month |
+| 40 | 100 M requests/month |
+| 400 | 1B requests/month |
+| 10K | 1B requests/day |
 
 
-| Power of 2            Exact Value   Approx Value        Bytes \------------------------------------------------------------------------------- 7                                       128 8                                       256 10                                   1024   1 thousand            1 KB 16                                65,536                               64 KB 20                           1,048,576   1 million                1 MB 30                    1,073,741,824   1 billion                 1 GB 32                    4,294,967,296                                4 GB 40              1,099,511,627,776  1 trillion                 1 TB |
-| :---- |
+  
 
-| KiloByte  ←→         Thousand           ←→ 103 Mega      ←→          Million                ←→ 106 Giga       ←→          Billion                 ←→ 109  Tera        ←→          Trillion                ←→ 1012 Peta       ←→          Quadrillion          ←→ 1015 |
-| :---- |
+| Power of 2             | Exact Value | Approx Value | Bytes |
+| :---- | :---- | :---- | :---- |
+| 7 | 128 |  |  |
+| 8 | 256 |  |  |
+| 10 | 1024 | 1 Thousand | 1KB |
+| 16 | 65,536 |  | 64 KB |
+| 20 | 1,048,576  | 1 Million | 1 MB |
+| 30 | 1,073,741,824 | 1 Billion | 1 GB |
+| 32 | 4,294,967,296 |  | 4 GB |
+| 40 | 1,099,511,627,776 | 1 Trillion | 1 TB |
 
-- eg: 10Mil\*1Kb \= (10\*106)\*(103) \= 10 (109) \= 10GB  
-- Caching \- 80:20 rule (20% of case generating 80% traffic)  
+| KiloByte (KB) | Thousand | 103 |
+| :---- | :---- | :---- |
+| MegaByte (MB) | Million | 106 |
+| GigaByte (GB) | Billion | 109 |
+| TeraByte (TB) | Trillion | 1012 |
+| PetaByte (PB) | Quadrillion | 1015 |
+
+- **eg: 10Mil requests \* 1Kb data \= (10\*106)\*(103) \= 10 (109) \= 10GB storage**
+
+- Caching \- 80:20 rule (20% of case generating 80% traffic)
+
 - **How many app servers do we need?**  
   - (\# of rps to handle)/(\# of rps a single server can handle)  
   - Factors to consider:  CPU Bound, Memory Bound, I/O Bound  
@@ -66,13 +88,20 @@ Follow-up
 
 ## Protocols for event-driven API
 
-| Protocol | Description | Use Cases | Subscription Model |  |
-| ----- | ----- | ----- | ----- | ----- |
-| Webhook | HTTP-based callback function that allows lightweight, event-driven infrequent communication between APIs | trigger automation workflows | push-based |  |
-| WebSub | communication channel for frequent messages between web content publishers and subscribers based on HTTP webhooks | news aggregator platforms, stock exchanges, and air traffic networks | push-based |  |
-| WebSockets | provides full-duplex communication channels over a single TCP connection with lower overhead than half-duplex alternatives such as HTTP polling | financial tickers, location-based apps, and chat solutions | pull-based |  |
-| SSE (Server Sent Events) | lightweight and subscribe-only protocol for event-driven data streams | live score updates, live video comments | pull-based | HTTP Accept header on the request has ***text/event-stream*** |
-| MQTT | protocol for streaming data between devices with limited CPU power and low bandwidth networks | Internet of Things | pull-based |  |
+| Protocol | Use Case | Transport Layer | Connection Type | Data Format | Scalability | Security | Latency | Reliability | Bi-Directional | Example Use Cases |
+| ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
+| **Webhooks** | One-way event notifications | HTTP(S) | Stateless (Push-based) | JSON, XML, others | High (easy to scale) | HTTPS (TLS/SSL), HMAC signing, IP whitelisting | Moderate (depends on HTTP response) | Dependent on receiver uptime (HTTP retries available) | No | Payment notifications, GitHub commits, Stripe events |
+| **WebSub** (formerly PubSubHubbub) | Publisher-subscriber model for webhooks | HTTP(S) | Stateless, event-driven (Push-Pull) | JSON, Atom, RSS | High (Hub manages subscriptions) | HTTPS (TLS/SSL), HMAC signing | Low to Moderate | Moderate (depends on hub and client uptime) | No | Blog update notifications, RSS feed subscriptions |
+| **WebSockets** | Real-time bi-directional communication | TCP (typically over HTTP/S) | Persistent connection (full-duplex) | JSON, binary (protocol-agnostic) | Scalable (via load balancing, sharding) | HTTPS, WSS (TLS/SSL), token-based authentication | Low (very fast, near real-time) | High (keeps connection alive, can reconnect) | Yes | Chat applications, multiplayer games, stock trading platforms |
+| **Server-Sent Events (SSE)** | One-way server push notifications | HTTP(S) | Persistent connection (client listens, server pushes) | Plain text, JSON | Scalable (leverages HTTP/2, load balancing) | HTTPS (TLS/SSL) | Low (streaming data, but slower than WebSockets) | Moderate (depends on connection stability) | No | Live sports updates, social media feeds, real-time notifications |
+| **MQTT** (Message Queue Telemetry Transport) | Lightweight pub/sub for IoT and low-bandwidth environments | TCP/IP | Persistent connection (Client-Server) | Binary, JSON, XML | Very scalable (broker-based, optimized for many clients) | TLS, username/password authentication, topic-based access control | Very low (optimized for low-latency) | High (QoS options ensure reliable delivery) | No (only pub/sub) | IoT device communication, home automation, telemetry |
+| **AMQP** (Advanced Message Queuing Protocol) | High-performance message broker communication | TCP | Persistent (pub/sub, point-to-point) | Binary, JSON, XML | Highly scalable (broker-based) | TLS, SASL, message encryption, access control | Low (optimizes performance) | Very high (supports transactional messaging) | No | Enterprise messaging, task queues (e.g., RabbitMQ) |
+| **Kafka** (Event Streaming Platform) | Distributed, high-throughput streaming platform | TCP | Persistent (pub/sub, pull-based consumers) | JSON, Avro, Protobuf | Extremely scalable (distributed brokers, partitions) | TLS, SASL, topic-based ACL, encryption | Low (optimized for large scale streaming) | Very high (guaranteed delivery with replication) | No | Real-time event streaming, log aggregation, analytics |
+| **gRPC Streaming** | Real-time streaming RPC framework | HTTP/2 | Persistent (bi-directional or uni-directional streaming) | Protobuf | Scalable (HTTP/2 multiplexing, load balancing) | TLS (mandatory), client/server authentication | Very low (low overhead with HTTP/2) | High (supports retries and flow control) | Yes | Real-time microservices communication, video/audio streaming |
+| **XMPP** (Extensible Messaging and Presence Protocol) | Instant messaging and presence info | TCP/IP | Persistent (bi-directional) | XML | Scalable (federation possible) | TLS, SASL, end-to-end encryption (OMEMO) | Low (optimized for chat-like scenarios) | High (supports delivery receipts, acknowledgments) | Yes | Instant messaging, presence updates, group chats |
+| **CoAP** (Constrained Application Protocol) | IoT applications with constrained devices | UDP (or DTLS for security) | Stateless (client-server, request/response) | Binary (CBOR) | Scalable (small packet size, low overhead) | DTLS (Datagram TLS), payload encryption | Low (lightweight, but not real-time) | Moderate (no guaranteed delivery, best-effort) | No | IoT devices in low-power networks, smart home sensors |
+
+---
 
 \- Only 6 concurrent SSE connections can be opened per web browser  
 \- For SSE the data format is restricted to transporting UTF-8 messages 
