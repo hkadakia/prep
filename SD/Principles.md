@@ -54,8 +54,6 @@
 
 * [Blob Storage (Amazon S3)](#blob-storage)
 
-* [DB Communication](#db-communication)
-
 [Security](#security)
 
 * [SSL-TLS](#ssl-tls)
@@ -121,10 +119,10 @@ Application Caching – in-memory caches (memcached/redis)
 
 ##### Ways to update cache
 
-**Cache-aside/Lazy loading**: Only requested data is cached. (look for entry in cache, if miss, load entry from DB, add entry to cache & return entry).  
-**Write-through:** Write to cache, store in DB, return to user.  
-**Write-behind/Write-back**: Write to cache, add event to q, return to user, async write to DB.  
-**Refresh-ahead**
+* Cache-aside/Lazy loading: Only requested data is cached. (look for entry in cache, if miss, load entry from DB, add entry to cache & return entry).  
+* Write-through: Write to cache, store in DB, return to user.  
+* Write-behind/Write-back: Write to cache, add event to q, return to user, async write to DB.  
+* Refresh-ahead
 
 #### Sharding
 
@@ -149,7 +147,7 @@ Application Caching – in-memory caches (memcached/redis)
 * Thus, each node becomes responsible for the region in the ring between it and its predecessor node on the ring.   
 * **The principal advantage of consistent hashing is that departure or arrival of a node only affects its immediate neighbors and other nodes remain unaffected.**   
 * **Basic consistent hashing algorithm presents some challenges. First, the random position assignment of each node on the ring leads to non-uniform data and load distribution. Second, the basic algorithm is oblivious to the heterogeneity in the performance of nodes.**  
-- To avoid this issue, instead of mapping a node to a single point in the circle, each node gets assigned to multiple points in the ring. When a new node is added to the system, it is assigned multiple positions in the ring.
+*  To avoid this issue, instead of mapping a node to a single point in the circle, each node gets assigned to multiple points in the ring. When a new node is added to the system, it is assigned multiple positions in the ring.
 
 #### Data Replication
 
@@ -168,20 +166,20 @@ Application Caching – in-memory caches (memcached/redis)
 
 ##### Types of Load Balancing
 
-**No load balancing**: request directly to the web server.  
-**Layer 4 load balancing**: load balance ***network traffic*** to multiple servers is to use layer 4 (transport layer) load balancing.  
-**Layer 7 load balancing**: forward requests to different backend servers ***based on the content*** of the user’s request. 
+* No load balancing: request directly to the web server.  
+* Layer 4 load balancing: load balance ***network traffic*** to multiple servers is to use layer 4 (transport layer) load balancing.  
+* Layer 7 load balancing: forward requests to different backend servers ***based on the content*** of the user’s request. 
 
 ##### Load Balancing Algorithms
 
 **Static Load Balancing**
 
-* **Round robin**/Weighted Round robin  
+* Round robin/Weighted Round robin  
 * IP Hash Method
 
 **Dynamic Load Balancing**
 
-* **Least connections**/Weighted least connections: server with the least number of connections. This is recommended for longer sessions. Weighted based on cpu/machine size.  
+* Least connections/Weighted least connections: server with the least number of connections. This is recommended for longer sessions. Weighted based on cpu/machine size.  
 * Least Response Time  
 * Resource-Based: Specialized software called an agent runs on each server and calculates usage of server resources, such as its computing capacity and memory. Then, the load balancer checks the agent for sufficient free resources before distributing traffic to that server.
 
@@ -271,30 +269,32 @@ __Cons of fail-over__: More hardware & additional complexity. Potential for loss
 ### DNS
 
 Routing of traffic using one of the below algos:  
-**Weighted Round-Robin**: factors in server capacity, assigning more requests to higher-capacity servers.  
-**Latency-based**  
-**Geolocation-based**
+* Weighted Round-Robin: factors in server capacity, assigning more requests to higher-capacity servers.  
+* Latency-based
+* Geolocation-based
 
 ### Communication
 
 **Polling:**
 
-**Websockets**: Websockets are a two-way communication channel between a client and a server. The client opens a connection to the server and keeps it open. The server keeps a connection open and sends new data to the client without requiring additional requests.   
-  *Drawbacks*: Websockets are a good solution, and for real-time chat applications that have a more balanced read/write ratio, they are optimal. However, when the read/write ratio is not balanced 2-way communication channel is not optimal as there is overhead of maintaining connection on server
+* Websockets: Websockets are a two-way communication channel between a client and a server. The client opens a connection to the server and keeps it open. The server keeps a connection open and sends new data to the client without requiring additional requests.   
 
-**Server Sent Events (SSE)**: SSE is a persistent connection just like websockets, but it is unidirectional and goes over HTTP instead of a separate protocol. This means that the server can send data to the client, but the client cannot send data to the server. Used when read ratio \>\> write ratio.  
-  *Drawbacks*:  One of the primary issues is maintaining the persistent connection in environments where connections are routinely balanced across multiple servers. Handling reconnections gracefully is crucial. Although SSE automatically tries to reconnect when a connection is lost, ensuring that clients can seamlessly resume receiving updates without missing any data requires careful implementation on the server side.
+  * Drawbacks: Websockets are a good solution, and for real-time chat applications that have a more balanced read/write ratio, they are optimal. However, when the read/write ratio is not balanced 2-way communication channel is not optimal as there is overhead of maintaining connection on server
+
+* Server Sent Events (SSE): SSE is a persistent connection just like websockets, but it is unidirectional and goes over HTTP instead of a separate protocol. This means that the server can send data to the client, but the client cannot send data to the server. Used when read ratio \>\> write ratio.  
+
+  * Drawbacks:  One of the primary issues is maintaining the persistent connection in environments where connections are routinely balanced across multiple servers. Handling reconnections gracefully is crucial. Although SSE automatically tries to reconnect when a connection is lost, ensuring that clients can seamlessly resume receiving updates without missing any data requires careful implementation on the server side.
 
 ### Databases
 
 #### Techniques to scale SQL DB
 
-**master-slave replication**  
-**master-master replication**  
-**federation**  
-**sharding**  
-**denormalization**  
-**SQL tuning**
+* master-slave replication
+* master-master replication  
+* federation
+* sharding  
+* denormalization 
+* SQL tuning
 
 ![image3](../img/databases.png)
 
@@ -303,7 +303,8 @@ Routing of traffic using one of the below algos:
 Key-Value store (hash table)  
 Document store (key-value store with documents stored as values)  
 Wide column   
-Graph DB (graph)  
+Graph DB (graph)
+
 **Sample data well-suited for NoSQL**:
 
 * Rapid ingest of clickstream and log data  
@@ -316,35 +317,35 @@ Graph DB (graph)
 
 #### Blob Storage
 
-- store fast unstructured data  
-- media retrieval is super fast/seamless
+* store fast unstructured data  
+* media retrieval is super fast/seamless
 
-| Criteria | PostgreSQL | DynamoDB | Cassandra | Redis |
-| ----- | ----- | ----- | ----- | ----- |
-| **Type** | Relational (SQL) | NoSQL (Key-Value/Document) | NoSQL (Wide-Column Store) | NoSQL (Key-Value In-Memory Store) |
-| **Data Model** | Relational (Tables with defined schema) | Key-Value, Document | Wide-Column, Key-Value | Key-Value, Hashes, Lists, Sets, Sorted Sets |
-| **Write Performance** | Moderate (ACID transactions, good consistency) | High (Scales well with partitions, writes fast) | High (Scales well, optimized for writes) | Very High (In-memory, single-threaded, durable with persistence) |
-| **Read Performance** | Moderate (Depends on indexes and queries) | High (Scales well, single-digit ms latency) | High (Optimized for read-heavy workloads) | Very High (In-memory, near-instant reads) |
-| **Consistency** | Strong (ACID) | Tunable (Eventual by default, can be strong) | Tunable (Eventual, but adjustable consistency) | Strong for single-instance, eventual in cluster |
-| **Scalability** | Vertical scaling (Add more resources) | Horizontal (Auto-scaling, global tables) | Horizontal (Masterless, scales linearly) | Horizontal (Redis Cluster or Sentinel) |
-| **Partitioning / Sharding** | Limited support (manual partitioning) | Built-in with partition keys (automatic sharding) | Built-in (Data split across nodes) | Built-in with Redis Cluster |
-| **Replication** | Synchronous and Asynchronous Replication | Multi-region, Multi-master, automatic | Multi-master (peer-to-peer) replication | Master-slave replication, Redis Cluster |
-| **Transaction Support** | Full ACID transactions, complex queries | Limited transaction support (single partition) | Limited ACID-like transactions (lightweight) | Limited transaction support (MULTI/EXEC commands) |
-| **Schema Flexibility** | Rigid (needs predefined schema) | Flexible (schema-less) | Flexible (schema-less, column families) | Schema-less |
-| **Durability** | High (writes to disk with WAL logging) | High (Writes stored in SSD, eventual durability) | High (WAL logging, hints to ensure durability) | High (Snapshots, AOF for persistence) |
-| **Use Case Fit** | Traditional relational apps, ACID compliance | Serverless, scalable apps, high throughput | High availability, fault-tolerant distributed systems | Caching, real-time analytics, fast data access |
-| **Latency** | Moderate | Low | Low | Extremely low (in-memory access) |
-| **Indexing** | B-tree, hash, GIN, GiST indexes | Secondary indexes | Secondary indexes, Materialized Views | Primary key only |
-| **Querying** | SQL-based (complex joins, aggregates) | Limited querying capabilities, key-based | CQL (Cassandra Query Language) | Key-based querying (Lua scripts for custom queries) |
-| **Best for** | Complex relational data, consistent queries | High-scale, low-latency applications | Large-scale, distributed systems, write-heavy workloads | High-performance caching, real-time data |
+| Criteria                    | PostgreSQL                                     | DynamoDB                                          | Cassandra                                               | Redis                                                            |
+| --------------------------- | ---------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------- |
+| **Type**                    | Relational (SQL)                               | NoSQL (Key-Value/Document)                        | NoSQL (Wide-Column Store)                               | NoSQL (Key-Value In-Memory Store)                                |
+| **Data Model**              | Relational (Tables with defined schema)        | Key-Value, Document                               | Wide-Column, Key-Value                                  | Key-Value, Hashes, Lists, Sets, Sorted Sets                      |
+| **Write Performance**       | Moderate (ACID transactions, good consistency) | High (Scales well with partitions, writes fast)   | High (Scales well, optimized for writes)                | Very High (In-memory, single-threaded, durable with persistence) |
+| **Read Performance**        | Moderate (Depends on indexes and queries)      | High (Scales well, single-digit ms latency)       | High (Optimized for read-heavy workloads)               | Very High (In-memory, near-instant reads)                        |
+| **Consistency**             | Strong (ACID)                                  | Tunable (Eventual by default, can be strong)      | Tunable (Eventual, but adjustable consistency)          | Strong for single-instance, eventual in cluster                  |
+| **Scalability**             | Vertical scaling (Add more resources)          | Horizontal (Auto-scaling, global tables)          | Horizontal (Masterless, scales linearly)                | Horizontal (Redis Cluster or Sentinel)                           |
+| **Partitioning / Sharding** | Limited support (manual partitioning)          | Built-in with partition keys (automatic sharding) | Built-in (Data split across nodes)                      | Built-in with Redis Cluster                                      |
+| **Replication**             | Synchronous and Asynchronous Replication       | Multi-region, Multi-master, automatic             | Multi-master (peer-to-peer) replication                 | Master-slave replication, Redis Cluster                          |
+| **Transaction Support**     | Full ACID transactions, complex queries        | Limited transaction support (single partition)    | Limited ACID-like transactions (lightweight)            | Limited transaction support (MULTI/EXEC commands)                |
+| **Schema Flexibility**      | Rigid (needs predefined schema)                | Flexible (schema-less)                            | Flexible (schema-less, column families)                 | Schema-less                                                      |
+| **Durability**              | High (writes to disk with WAL logging)         | High (Writes stored in SSD, eventual durability)  | High (WAL logging, hints to ensure durability)          | High (Snapshots, AOF for persistence)                            |
+| **Use Case Fit**            | Traditional relational apps, ACID compliance   | Serverless, scalable apps, high throughput        | High availability, fault-tolerant distributed systems   | Caching, real-time analytics, fast data access                   |
+| **Latency**                 | Moderate                                       | Low                                               | Low                                                     | Extremely low (in-memory access)                                 |
+| **Indexing**                | B-tree, hash, GIN, GiST indexes                | Secondary indexes                                 | Secondary indexes, Materialized Views                   | Primary key only                                                 |
+| **Querying**                | SQL-based (complex joins, aggregates)          | Limited querying capabilities, key-based          | CQL (Cassandra Query Language)                          | Key-based querying (Lua scripts for custom queries)              |
+| **Best for**                | Complex relational data, consistent queries    | High-scale, low-latency applications              | Large-scale, distributed systems, write-heavy workloads | High-performance caching, real-time data                         |
 
-Search:  
+**Search**:  
+
 Use Elasticsearch for searching service
-
 * allows you to store, search, and analyze huge volumes of data quickly and in near real-time and give back answers in milliseconds.  
 * It's able to achieve fast search responses because instead of searching the text directly, it searches an index.
 
-### DB Communication
+### REST API
 
 There are four qualities of a **REST**ful interface:
 
@@ -354,9 +355,6 @@ There are four qualities of a **REST**ful interface:
 * [**HATEOAS**](http://restcookbook.com/Basics/hateoas/) (HTML interface for HTTP) \- your web service should be fully accessible in a browser.
 
 Being stateless, REST is great for horizontal scaling and partitioning.
-
-| Power of 2            Exact Value   Approx Value        Bytes \------------------------------------------------------------------------------- 7                                       128 8                                       256 10                                   1024   1 thousand            1 KB 16                                65,536                               64 KB 20                           1,048,576   1 million                1 MB 30                    1,073,741,824   1 billion                 1 GB 32                    4,294,967,296                                4 GB 40              1,099,511,627,776  1 trillion                 1 TB |
-| :---- |
 
 ### Security
 
