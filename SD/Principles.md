@@ -137,11 +137,11 @@ Application Caching – in-memory caches (memcached/redis)
 * Data Shards  
 * Parity Shards  
 * URL-based sharding: whenever asked to find the shard for a URL, it either pulls it from the directory/cache or, if it's not there, assigns it to one of the available shards for that entity type.  
-* **Consistent Hashing**
+* Consistent Hashing
 
 ##### Consistent Hashing 
 
-* Rely on **consistent hashing** to distribute the load across multiple storage hosts.   
+* Rely on consistent hashing to distribute the load across multiple storage hosts.   
 * In consistent hashing, the output range of a hash function is treated as a fixed circular space or “ring”.  
 * Each node in the system is assigned a random value within this space which represents its “position” on the ring. Each data item identified by a key is assigned to a node by hashing the data item’s key to yield its position on the ring, and then walking the ring clockwise to find the first node with a position larger than the item’s position.   
 * Thus, each node becomes responsible for the region in the ring between it and its predecessor node on the ring.   
@@ -167,8 +167,8 @@ Application Caching – in-memory caches (memcached/redis)
 ##### Types of Load Balancing
 
 * No load balancing: request directly to the web server.  
-* Layer 4 load balancing: load balance ***network traffic*** to multiple servers is to use layer 4 (transport layer) load balancing.  
-* Layer 7 load balancing: forward requests to different backend servers ***based on the content*** of the user’s request. 
+* Layer 4 load balancing: load balance **network traffic** to multiple servers is to use layer 4 (transport layer) load balancing.  
+* Layer 7 load balancing: forward requests to different backend servers **based on the content** of the user’s request. 
 
 ##### Load Balancing Algorithms
 
@@ -184,11 +184,11 @@ Application Caching – in-memory caches (memcached/redis)
 * Resource-Based: Specialized software called an agent runs on each server and calculates usage of server resources, such as its computing capacity and memory. Then, the load balancer checks the agent for sufficient free resources before distributing traffic to that server.
 
 **Sticky session/cookies**  
-By request parameters/**source**: server to use based on a hash of the source IP address that users are making requests from
+By request parameters/source: server to use based on a hash of the source IP address that users are making requests from
 
 ##### Reverse Proxy
 
-A **reverse proxy** is a web server that centralizes internal services and provides unified interfaces to the public. Requests from clients are forwarded to a server that can fulfill it before the reverse proxy returns the server's response to the client.
+A reverse proxy is a web server that centralizes internal services and provides unified interfaces to the public. Requests from clients are forwarded to a server that can fulfill it before the reverse proxy returns the server's response to the client.
 
 Nginx  
 Software HAProxy : HA Load Balancer Reverse Proxy 
@@ -211,7 +211,7 @@ Benefits:
 
 #### Conflict Resolution
 
-When to perform the process of updating conflicts ie., resolve during reads or writes? If data store then \`**last write wins**\` but the application is aware of data schema so they can decide what is more suitable for the use case. 
+When to perform the process of updating conflicts ie., resolve during reads or writes? If data store then \`__last write wins__\` but the application is aware of data schema so they can decide what is more suitable for the use case. 
 
 ### High Level Components Diagram
 
@@ -246,7 +246,7 @@ When to perform the process of updating conflicts ie., resolve during reads or w
 
 ### Availability
 
-***A high availability (HA) setup is broadly defined as infrastructure without a single point of failure.*** 
+**A high availability (HA) setup is broadly defined as infrastructure without a single point of failure.**
 
 #### How to achieve HA
 
