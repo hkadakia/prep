@@ -2,33 +2,33 @@
 
 [Scalability](#scalability)
 
-[Things to consider while Scaling](#things-to-consider-while-scaling)
+* [Things to consider while Scaling](#things-to-consider-while-scaling)
 
 [Caching](#caching)
 
-[Types of Caching](#types-of-caching)
+* [Types of Caching](#types-of-caching)
 
-[Ways to update cache](#ways-to-update-cache)
+* [Ways to update cache](#ways-to-update-cache)
 
 [Partitioning/Sharding](#sharding)
 
-[Ways to do sharding](#ways-to-do-sharding)
+* [Ways to do sharding](#ways-to-do-sharding)
 
-[Consistent hashing](#consistent-hashing)
+* [Consistent hashing](#consistent-hashing)
 
 [Data Replication](#data-replication)
 
-[How to do replication](#how-to-do-replication)
+* [How to do replication](#how-to-do-replication)
 
 [Load-Balancer](#load-balancer)
 
-[Types of Load Balancing](#types-of-load-balancing)
+* [Types of Load Balancing](#types-of-load-balancing)
 
-[Load Balancing Algorithms](#load-balancing-algorithms)
+* [Load Balancing Algorithms](#load-balancing-algorithms)
 
-[Reverse Proxy](#reverse-proxy)
+* [Reverse Proxy](#reverse-proxy)
 
-[Load balancer vs reverse proxy](#load-balancer-vs-reverse-proxy)
+* [Load balancer vs reverse proxy](#load-balancer-vs-reverse-proxy)
 
 [Latency and Throughput](#latency-and-throughput)
 
@@ -40,7 +40,7 @@
 
 [Availability](#availability)
 
-[How to achieve HA](#how-to-achieve-ha)
+* [How to achieve HA](#how-to-achieve-ha)
 
 [DNS](#dns)
 
@@ -48,17 +48,17 @@
 
 [Databases](#databases)
 
-[Techniques to scale SQL DB](#techniques-to-scale-sql-db)
+* [Techniques to scale SQL DB](#techniques-to-scale-sql-db)
 
-[NOSQL Databases](#nosql-databases)
+* [NOSQL Databases](#nosql-databases)
 
-[Blob Storage (Amazon S3)](#blob-storage)
+* [Blob Storage (Amazon S3)](#blob-storage)
 
-[DB Communication](#db-communication)
+* [DB Communication](#db-communication)
 
 [Security](#security)
 
-[SSL-TLS](#ssl-tls)
+* [SSL-TLS](#ssl-tls)
 
 
 ### Scalability
@@ -224,14 +224,14 @@ When to perform the process of updating conflicts ie., resolve during reads or w
 * lightweight  
 * stateless service deployed across several data centers
 
-      **Actions**:
+**Actions**:
 
 * Request Validation  
 * AuthN/AuthZ  
 * TLS/SSL Termination  
 * Server side encryption  
 * Caching  
-* **Rate Limiting/**Throttling (Leaky bucket algo)  
+* Rate Limiting/Throttling (Leaky bucket algo)  
 * Request dispatching/deduplicating  
 * Usage data collection
 
@@ -242,9 +242,9 @@ When to perform the process of updating conflicts ie., resolve during reads or w
 
 ### Consistency
 
-**Weak Consistency** \- best effort approach. After a write, a read may or may not see it. eg: video chat, realtime games. Works well in real time use case.  
-**Strong Consistency** \- data is replicated synchronously. After a write, reads will see it. eg: file systems & RDMS. Works well in systems that need transactions.  
-**Eventual Consistency** \- data is replicated asynchronously. After a write, reads will eventually see it. eg: DNS/Email, S3, search engine. Works well in HA systems.
+* Weak Consistency \- best effort approach. After a write, a read may or may not see it. eg: video chat, realtime games. Works well in real time use case.  
+* Strong Consistency \- data is replicated synchronously. After a write, reads will see it. eg: file systems & RDMS. Works well in systems that need transactions.  
+* Eventual Consistency \- data is replicated asynchronously. After a write, reads will eventually see it. eg: DNS/Email, S3, search engine. Works well in HA systems.
 
 ### Availability
 
@@ -262,10 +262,11 @@ When to perform the process of updating conflicts ie., resolve during reads or w
 * Geographic distribution  
   * deploying system components across multiple locations or data centers
 
-Fail-over  
-**Active-passive/Master-slave**: heartbeats are sent between the active and the passive server on standby. If the heartbeat is interrupted, the passive server takes over the active's IP address and resumes service.  
-**Active-active/master-master**: both servers are managing traffic, spreading the load between them.  
-Cons of fail-over: More hardware & additional complexity. Potential for loss of data if active system fails.
+**Fail-over**
+* Active-passive/Master-slave: heartbeats are sent between the active and the passive server on standby. If the heartbeat is interrupted, the passive server takes over the active's IP address and resumes service.  
+* Active-active/master-master: both servers are managing traffic, spreading the load between them.  
+
+__Cons of fail-over__: More hardware & additional complexity. Potential for loss of data if active system fails.
 
 ### DNS
 
