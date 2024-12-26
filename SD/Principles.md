@@ -10,27 +10,27 @@
 
 [Ways to update cache](#ways-to-update-cache)
 
-[Partitioning/Sharding](#partitioning/sharding)
+[Partitioning/Sharding](#sharding)
 
 [Ways to do sharding](#ways-to-do-sharding)
 
-[How to do consistent hashing/partitioning?](#how-to-do-consistent-hashing/partitioning?)
+[Consistent hashing](#consistent-hashing)
 
 [Data Replication](#data-replication)
 
-[How to do replication:](#how-to-do-replication:)
+[How to do replication](#how-to-do-replication)
 
 [Load-Balancer](#load-balancer)
 
-[Types of Load Balancing:](#types-of-load-balancing:)
+[Types of Load Balancing](#types-of-load-balancing)
 
-[Load Balancing Algorithms:](#load-balancing-algorithms:)
+[Load Balancing Algorithms](#load-balancing-algorithms)
 
-[Reverse Proxy:](#reverse-proxy:)
+[Reverse Proxy](#reverse-proxy)
 
 [Load balancer vs reverse proxy](#load-balancer-vs-reverse-proxy)
 
-[Latency & Throughput](#latency-&-throughput)
+[Latency and Throughput](#latency-and-throughput)
 
 [Conflict Resolution](#conflict-resolution)
 
@@ -40,7 +40,7 @@
 
 [Availability](#availability)
 
-[How to achieve HA?](#how-to-achieve-ha?)
+[How to achieve HA](#how-to-achieve-ha)
 
 [DNS](#dns)
 
@@ -48,25 +48,20 @@
 
 [Databases](#databases)
 
-[Techniques to scale RDBMS/SQL DB](#techniques-to-scale-rdbms/sql-db)
+[Techniques to scale SQL DB](#techniques-to-scale-sql-db)
 
 [NOSQL Databases](#nosql-databases)
 
-[Blob Storage (Amazon S3)](#blob-storage-\(amazon-s3\))
+[Blob Storage (Amazon S3)](#blob-storage)
 
-[Communication](#communication-1)
+[DB Communication](#db-communication)
 
 [Security](#security)
 
-[SSL/TLS](#ssl/tls)
+[SSL-TLS](#ssl-tls)
 
-[Encryption](#encryption)
 
-[Authentication](#authentication)
-
-[Authorization](#authorization)
-
-### Scalability {#scalability}
+### Scalability
 
 **Rules of scalability**
 
@@ -109,11 +104,11 @@ Note: CI/CD pipeline can streamline deployment process.
 * Vertical Scaling  
 * Horizontal Scaling
 
-### Things to consider while Scaling {#things-to-consider-while-scaling}
+### Things to consider while Scaling
 
-#### Caching {#caching}
+#### Caching
 
-##### Types of Caching {#types-of-caching}
+##### Types of Caching
 
 Client Caching \- located on client side (OS or browser), server side or in a distinct cache layer  
 CDN Caching  
@@ -124,14 +119,14 @@ Application Caching – in-memory caches (memcached/redis)
 - Caching at DB query level  
 - Caching at object level
 
-##### Ways to update cache {#ways-to-update-cache}
+##### Ways to update cache
 
 **Cache-aside/Lazy loading**: Only requested data is cached. (look for entry in cache, if miss, load entry from DB, add entry to cache & return entry).  
 **Write-through:** Write to cache, store in DB, return to user.  
 **Write-behind/Write-back**: Write to cache, add event to q, return to user, async write to DB.  
 **Refresh-ahead**
 
-#### Partitioning/Sharding {#partitioning/sharding}
+#### Sharding
 
 * Table Partitioning (separate active data in separate table with archive table)  
 * Vertical/Feature-based Partitioning (all data related to specific feature on same machine)  
@@ -139,14 +134,14 @@ Application Caching – in-memory caches (memcached/redis)
 * Key-Based Partitioning (use part of the data itself to do the partitioning, one-way hashing algo)  
 * Directory-based partitioning (maintains a lookup table somewhere in the cluster, that keeps track of which data is stored on which shard.)
 
-##### Ways to do sharding {#ways-to-do-sharding}
+##### Ways to do sharding
 
 * Data Shards  
 * Parity Shards  
 * URL-based sharding: whenever asked to find the shard for a URL, it either pulls it from the directory/cache or, if it's not there, assigns it to one of the available shards for that entity type.  
 * **Consistent Hashing**
 
-##### How to do consistent hashing/partitioning?  {#how-to-do-consistent-hashing/partitioning?}
+##### Consistent Hashing 
 
 * Rely on **consistent hashing** to distribute the load across multiple storage hosts.   
 * In consistent hashing, the output range of a hash function is treated as a fixed circular space or “ring”.  
@@ -156,28 +151,28 @@ Application Caching – in-memory caches (memcached/redis)
 * **Basic consistent hashing algorithm presents some challenges. First, the random position assignment of each node on the ring leads to non-uniform data and load distribution. Second, the basic algorithm is oblivious to the heterogeneity in the performance of nodes.**  
 - To avoid this issue, instead of mapping a node to a single point in the circle, each node gets assigned to multiple points in the ring. When a new node is added to the system, it is assigned multiple positions in the ring.
 
-#### Data Replication {#data-replication}
+#### Data Replication
 
 * Single leader replication (eg: SQL db \- zookeeper)  
 * Multiple leader replication (used to replicate across multiple datacenters)  
 * Leaderless replication (eg: NoSQL DB \- cassandra)
 
-##### How to do replication: {#how-to-do-replication:}
+##### How to do replication
 
 * Replicate data on multiple hosts.  
 * To detect the inconsistencies between replicas faster and to minimize the amount of transferred data, Dynamo uses Merkle trees
 
 ![image1](../img/ingestion-path.png)
 
-#### Load-Balancer {#load-balancer}
+#### Load-Balancer
 
-##### Types of Load Balancing: {#types-of-load-balancing:}
+##### Types of Load Balancing
 
 **No load balancing**: request directly to the web server.  
 **Layer 4 load balancing**: load balance ***network traffic*** to multiple servers is to use layer 4 (transport layer) load balancing.  
 **Layer 7 load balancing**: forward requests to different backend servers ***based on the content*** of the user’s request. 
 
-##### Load Balancing Algorithms: {#load-balancing-algorithms:}
+##### Load Balancing Algorithms
 
 **Static Load Balancing**
 
@@ -193,7 +188,7 @@ Application Caching – in-memory caches (memcached/redis)
 **Sticky session/cookies**  
 By request parameters/**source**: server to use based on a hash of the source IP address that users are making requests from
 
-##### Reverse Proxy: {#reverse-proxy:}
+##### Reverse Proxy
 
 A **reverse proxy** is a web server that centralizes internal services and provides unified interfaces to the public. Requests from clients are forwarded to a server that can fulfill it before the reverse proxy returns the server's response to the client.
 
@@ -206,25 +201,25 @@ Benefits:
 **Caching**  
 **Increased security**
 
-##### Load balancer vs reverse proxy {#load-balancer-vs-reverse-proxy}
+##### Load balancer vs reverse proxy
 
 * Deploying a load balancer is useful when you have multiple servers. Often, load balancers route traffic to a set of servers serving the same function.  
 * Reverse proxies can be useful even with just one web server or application server, opening up the benefits described in the previous section.  
 * Solutions such as NGINX and HAProxy can support both layer 7 reverse proxying and load balancing.
 
-#### Latency & Throughput {#latency-&-throughput}
+#### Latency and Throughput
 
 \<TODO\>
 
-#### Conflict Resolution {#conflict-resolution}
+#### Conflict Resolution
 
 When to perform the process of updating conflicts ie., resolve during reads or writes? If data store then \`**last write wins**\` but the application is aware of data schema so they can decide what is more suitable for the use case. 
 
-### High Level Components Diagram {#high-level-components-diagram}
+### High Level Components Diagram
 
 ![components](../img/components.png)
 
-**Front end service:**
+**Front end service**
 
 * lightweight  
 * stateless service deployed across several data centers
@@ -245,17 +240,17 @@ When to perform the process of updating conflicts ie., resolve during reads or w
 * Leader-follower relationship (in-cluster manager eg: zookeeper)  
 * Small cluster of independent hosts (out-cluster manager)
 
-### Consistency {#consistency}
+### Consistency
 
 **Weak Consistency** \- best effort approach. After a write, a read may or may not see it. eg: video chat, realtime games. Works well in real time use case.  
 **Strong Consistency** \- data is replicated synchronously. After a write, reads will see it. eg: file systems & RDMS. Works well in systems that need transactions.  
 **Eventual Consistency** \- data is replicated asynchronously. After a write, reads will eventually see it. eg: DNS/Email, S3, search engine. Works well in HA systems.
 
-### Availability {#availability}
+### Availability
 
 ***A high availability (HA) setup is broadly defined as infrastructure without a single point of failure.*** 
 
-#### How to achieve HA? {#how-to-achieve-ha?}
+#### How to achieve HA
 
 * Redundancy & Replication  
 * Load Balancing  
@@ -272,14 +267,14 @@ Fail-over
 **Active-active/master-master**: both servers are managing traffic, spreading the load between them.  
 Cons of fail-over: More hardware & additional complexity. Potential for loss of data if active system fails.
 
-### DNS {#dns}
+### DNS
 
 Routing of traffic using one of the below algos:  
 **Weighted Round-Robin**: factors in server capacity, assigning more requests to higher-capacity servers.  
 **Latency-based**  
 **Geolocation-based**
 
-### Communication {#communication}
+### Communication
 
 **Polling:**
 
@@ -289,9 +284,9 @@ Routing of traffic using one of the below algos:
 **Server Sent Events (SSE)**: SSE is a persistent connection just like websockets, but it is unidirectional and goes over HTTP instead of a separate protocol. This means that the server can send data to the client, but the client cannot send data to the server. Used when read ratio \>\> write ratio.  
   *Drawbacks*:  One of the primary issues is maintaining the persistent connection in environments where connections are routinely balanced across multiple servers. Handling reconnections gracefully is crucial. Although SSE automatically tries to reconnect when a connection is lost, ensuring that clients can seamlessly resume receiving updates without missing any data requires careful implementation on the server side.
 
-### Databases {#databases}
+### Databases
 
-#### Techniques to scale RDBMS/SQL DB {#techniques-to-scale-rdbms/sql-db}
+#### Techniques to scale SQL DB
 
 **master-slave replication**  
 **master-master replication**  
@@ -302,7 +297,7 @@ Routing of traffic using one of the below algos:
 
 ![image3](../img/databases.png)
 
-#### NOSQL Databases {#nosql-databases}
+#### NOSQL Databases
 
 Key-Value store (hash table)  
 Document store (key-value store with documents stored as values)  
@@ -318,7 +313,7 @@ Graph DB (graph)
 
 ![processing](../img/processing-service.png)
 
-#### Blob Storage (Amazon S3) {#blob-storage-(amazon-s3)}
+#### Blob Storage
 
 - store fast unstructured data  
 - media retrieval is super fast/seamless
@@ -348,7 +343,7 @@ Use Elasticsearch for searching service
 * allows you to store, search, and analyze huge volumes of data quickly and in near real-time and give back answers in milliseconds.  
 * It's able to achieve fast search responses because instead of searching the text directly, it searches an index.
 
-### Communication {#communication-1}
+### DB Communication
 
 There are four qualities of a **REST**ful interface:
 
@@ -362,9 +357,9 @@ Being stateless, REST is great for horizontal scaling and partitioning.
 | Power of 2            Exact Value   Approx Value        Bytes \------------------------------------------------------------------------------- 7                                       128 8                                       256 10                                   1024   1 thousand            1 KB 16                                65,536                               64 KB 20                           1,048,576   1 million                1 MB 30                    1,073,741,824   1 billion                 1 GB 32                    4,294,967,296                                4 GB 40              1,099,511,627,776  1 trillion                 1 TB |
 | :---- |
 
-### Security {#security}
+### Security
 
-#### SSL/TLS {#ssl/tls}
+#### SSL-TLS
 
 **TLS**: encryption protocol in wide use on the internet. authenticates the server in a client-server connection and encrypts communications between client and server so that external parties cannot spy on the communications.
 
@@ -391,7 +386,7 @@ The big difference is that both client & server have their own certificate in MT
 
 OIDC (OpenID Connect): Is an identity authentication protocol that is an extension of OAuth2 to standardize the process for authenticating and authorizing users when they sign in to access digital services.
 
-#### Encryption {#encryption}
+#### Encryption
 
 Symmetric encryption: Using one key to encrypt & decrypt messages/communication.
 
