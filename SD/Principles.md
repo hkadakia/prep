@@ -196,10 +196,10 @@ Nginx
 Software HAProxy : HA Load Balancer Reverse Proxy 
 
 Benefits:  
-**SSL termination** \- Decrypt incoming requests and encrypt server responses so backend servers do not have to perform these potentially expensive operations ( no need for X.509)  
-**Session persistence**/stickiness  
-**Caching**  
-**Increased security**
+* SSL termination \- Decrypt incoming requests and encrypt server responses so backend servers do not have to perform these potentially expensive operations ( no need for X.509)  
+* Session persistence/stickiness  
+* Caching
+* Increased security
 
 ##### Load balancer vs reverse proxy
 
