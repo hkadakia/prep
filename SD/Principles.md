@@ -316,7 +316,7 @@ Graph DB (graph)
 * Frequently accessed ('hot') tables  
 * Metadata/lookup tables
 
-![][image4]
+![processing](../img/processing-service.png)
 
 #### Blob Storage (Amazon S3) {#blob-storage-(amazon-s3)}
 
@@ -379,7 +379,7 @@ Being stateless, REST is great for horizontal scaling and partitioning.
 
 **How does mTLS work?**  
 The big difference is that both client & server have their own certificate in MTLS for verification.  
-![][image6]
+![TLS Connection](../img/tls.png)
 
 **What attacks do mTLS prevent?**
 
@@ -401,7 +401,3 @@ TLS uses both symmetric and asymmetric. TLS Handshake uses asymmetric encryption
 
 Why do websites need SSL Certificates?  
 A website needs an SSL certificate in order to keep user data secure, verify ownership of the website, prevent attackers from creating a fake version of the site, and gain user trust.
-
-[image4]: (../img/processing-service.png)
-
-[image5]: (../img/tls.png)
