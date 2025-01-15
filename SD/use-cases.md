@@ -302,7 +302,7 @@ A zookeeper cluster, when deployed across at least three regions such that major
 
 - **How to scale?**
   - micro batching & aggregation  
-    ![][../img/flow.png]
+    ![image1][../img/flow.png]
 
 ### **Displaying thumbnails (TODO)**:
 
@@ -379,10 +379,10 @@ payment_order_id is the idempotency key which is globally unique.
 
 Note: Keep amount in string to avoid issues w/ different numeric precision in serialization & deserialization. Also the amount could be extremely big or small.
 
-![][../img/checkout.png]
+![image2][../img/checkout.png]
 
 Pay-in  
-![][../img/payin.png]  
+![image3][../img/payin.png]  
 When the checkout is clicked, the payment service sends a request to PSP. It generates a UUID/nonce of the payment order. Payment service stores the token before calling the PSP hosted payment page (iframe/widget). Sensitive info never reaches payment service & is stored at PSP.
 
 Some **failures** to consider:
@@ -398,7 +398,7 @@ Some **failures** to consider:
     - retry queue for transient error
     - DLQ if a message fails repeatedly.
 
-![][../img/dlq.png]
+![image4][../img/dlq.png]
 
 - **Exactly-once delivery**
   - We need to execute to at-least-once using **retry**
