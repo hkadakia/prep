@@ -383,6 +383,7 @@ Note: Keep amount in string to avoid issues w/ different numeric precision in se
 
 Pay-in  
 ![image3](../img/payin.png) 
+
 When the checkout is clicked, the payment service sends a request to PSP. It generates a UUID/nonce of the payment order. Payment service stores the token before calling the PSP hosted payment page (iframe/widget). Sensitive info never reaches payment service & is stored at PSP.
 
 Some **failures** to consider:
